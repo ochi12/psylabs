@@ -76,13 +76,8 @@ int main (int argc, char* argv[]) {
 		dt = ((float)now - (float)last) / 1000.0f;
 		last = now;
 
-		SDL_Event ev;
-		while (SDL_PollEvent(&ev)) {
-			switch(ev.type) {
-			case SDL_QUIT:
-				running = false;
-				break;
-			}
+		if (SDL_QuitRequested() == SDL_TRUE) {
+			running = false;
 		}
 
 		game->update(dt);
