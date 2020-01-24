@@ -1,4 +1,5 @@
 CC=g++
+DB=gdb
 CFLAGS= -Iinc -g
 LFLAGS= -lGL -lSDL2 -lGLEW
 SRCDIR=src
@@ -18,8 +19,11 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.cpp $(OBJDIR)
 $(BIN): $(OBJ)
 	$(CC) -o $@ $^ $(LFLAGS)
 
-run:
+run: $(BIN)
 	./$(BIN)
+
+debug: $(BIN)
+	$(DB) ./$(BIN)
 
 clean:
 	rm $(BIN) $(OBJ)
