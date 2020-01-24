@@ -30,10 +30,11 @@ void Camera::rotate(glm::vec3 rotation) {
 	(*this->rotation) += rotation;
 	float alpha = rotation.y;
 	float theta = rotation.x;
+	float r = cos(glm::radians(theta));
 
-	this->forward->x = sin(glm::degrees(alpha));
-	this->forward->y = sin(glm::degrees(theta));
-	this->forward->z = tan(glm::degrees(180 - alpha))/(this->forward->x);
+	this->forward->x = sin(glm::radians(alpha)) * r;
+	this->forward->y = sin(glm::radians(theta));
+	this->forward->z = cos(glm::radians(alpha)) * r;
 
 	this->up->x = 0;
 	this->up->y = 1;
