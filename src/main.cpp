@@ -3,8 +3,8 @@
 #include "Game.h"
 #include "opengl.h"
 
-#define WINDOW_WIDTH	640
-#define WINDOW_HEIGHT	480
+#define WINDOW_WIDTH	800
+#define WINDOW_HEIGHT	600
 
 int main (int argc, char* argv[]) {
 	SDL_Window* window = nullptr;
@@ -23,6 +23,10 @@ int main (int argc, char* argv[]) {
 	if (window == nullptr) {
 		SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Could not create window: %s ", SDL_GetError());
 		return -1;
+	}
+
+	if (SDL_SetRelativeMouseMode(SDL_TRUE) == -1) {
+		SDL_LogWarn(SDL_LOG_CATEGORY_INPUT, "Couldn't set relative mouse mode: %s\nYou might experience problems.", SDL_GetError());
 	}
 
 	glContext = SDL_GL_CreateContext(window);
