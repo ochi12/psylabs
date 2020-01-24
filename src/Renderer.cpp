@@ -23,37 +23,35 @@ void Renderer::setPerspectiveProjection(float fovy, float aspect, float near, fl
 	this->defaultShader->unbind();
 }
 
-void Renderer::rotateCamera(glm::vec3 rotation) {
-	this->cameraAngle -= rotation;
-}
-
-void Renderer::translateCamera(glm::vec3 translation) {
-	this->cameraPos -= translation;
-}
 
 void Renderer::registerObject(Model* m) {
 	m->setAttributeIndices(this->defaultShader->getPosLocation(), this->defaultShader->getNormalLocation());
 }
 
-void Renderer::startRendering(Model* m) {
+void Renderer::clearScreen() {
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+}
 
-	this->currentModel = m;
-	this->currentModel->bind();
+void Renderer::startRendering(Camera* cam) {
 	this->defaultShader->bind();
 
 	glm::mat4 view = glm::identity<glm::mat4>();
-	view = glm::rotate(view, this->cameraAngle.x, glm::vec3(1, 0, 0));
-	view = glm::rotate(view, this->cameraAngle.y, glm::vec3(0, 1, 0));
-	view = glm::rotate(view, this->cameraAngle.z, glm::vec3(0, 0, 1));
+	view = glm::rotate(view, glm::radians(-cam->getRotation()->x), glm::vec3(1, 0, 0));
+	view = glm::rotate(view, glm::radians(-cam->getRotation()->y), glm::vec3(0, 1, 0));
+	view = glm::rotate(view, glm::radians(-cam->getRotation()->z), glm::vec3(0, 0, 1));
 
-	view = glm::translate(view, this->cameraPos);
-
+	view = glm::translate(view, glm::vec3(0, 0, 0) - cam->getPosition());
 	this->defaultShader->setView(view);
 }
 
-void Renderer::renderModel(glm::vec3 pos, glm::vec3 scale) {
+void Renderer::renderModel(Model* m, glm::vec3 pos, glm::vec3 scale) {
+	if (m != this->currentModel) {
+		this->currentModel->unbind();
+		this->currentModel = m;
+		this->currentModel->bind();
+	}
+
 	glm::mat4 model = glm::identity<glm::mat4>();
 	model = glm::translate(model, pos);
 	model = glm::scale(model, scale);
@@ -63,17 +61,20 @@ void Renderer::renderModel(glm::vec3 pos, glm::vec3 scale) {
 	this->currentModel->draw();
 }
 
-void Renderer::renderModel(glm::vec3 pos) {
-	this->renderModel(pos, glm::vec3(1, 1, 1));
+void Renderer::renderModel(Model* m ,glm::vec3 pos) {
+	this->renderModel(m, pos, glm::vec3(1, 1, 1));
 }
 
 void Renderer::endRendering() {
 	this->defaultShader->unbind();
 	this->currentModel->unbind();
+	this->currentModel = nullptr;
 }
 
 void Renderer::setRenderColor(glm::vec4 color) {
+	this->defaultShader->bind();
 	this->defaultShader->setColor(color);
+	this->defaultShader->unbind();
 }
 
 bool Renderer::isValidState() {
