@@ -19,7 +19,8 @@ public:
 
 	void registerObject(Model* m);
 
-	void setLight(glm::vec3 pos, float intensity);
+	void setLight(glm::vec3 pos, glm::vec4 color, float intensity);
+	void setAmbientLight(glm::vec4(color), float intensity);
 
 	void clearScreen();
 	void startRendering(Camera* m);

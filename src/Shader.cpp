@@ -5,6 +5,8 @@
 #include "Shader.h"
 #include "resources.h"
 
+#define _DEBUG
+
 Shader::Shader(std::string vertexPath, std::string fragmentPath) {
 	this->uniformLocations = new std::map<std::string, GLint>();
 	this->vertexAttributeLocations = new std::map<std::string, GLuint>();
@@ -99,7 +101,7 @@ GLint Shader::getUniformLocation(std::string name) {
 		if (loc > -1) {
 			(*this->uniformLocations)[name] = loc;
 		} else {
-			std::cout << "holy moly" << std::endl;
+			std::cout << "holy moly" << name << std::endl;
 		}
 	}
 	return loc;
@@ -115,7 +117,7 @@ const GLchar* Shader::ReadShader( const char* filename ) {
 
 	if ( !infile ) {
 #ifdef _DEBUG
-		SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Unable to open file '%s'", filename);
+		SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Unable to open file '%s'", filename);
 #endif /* DEBUG */
 		return NULL;
 	}
@@ -169,7 +171,7 @@ GLuint Shader::LoadShaders(ShaderInfo* shaders) {
 
 			GLchar* log = new GLchar[len+1];
 			glGetShaderInfoLog( shader, len, &len, log );
-			SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Shader compilation failed: %s", log);
+			SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Shader compilation failed: %s", log);
 			delete [] log;
 #endif /* DEBUG */
 			return 0;
@@ -190,7 +192,7 @@ GLuint Shader::LoadShaders(ShaderInfo* shaders) {
 		
 		GLchar* log = new GLchar[len+1];
 		glGetProgramInfoLog( program, len, &len, log );
-			SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Shader linking failed: %s", log);
+			SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Shader linking failed: %s", log);
 		delete [] log;
 #endif /* DEBUG */
 		for ( entry = shaders; entry->type != GL_NONE; ++entry ) {

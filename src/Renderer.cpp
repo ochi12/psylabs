@@ -29,10 +29,18 @@ void Renderer::registerObject(Model* m) {
 	m->setAttributeIndices(this->defaultShader->getPosLocation(), this->defaultShader->getNormalLocation());
 }
 
-void Renderer::setLight(glm::vec3 pos, float intensity) {
+void Renderer::setLight(glm::vec3 pos, glm::vec4 color, float intensity) {
 	this->defaultShader->bind();
 	this->defaultShader->setLightPos(pos);
+	this->defaultShader->setLightColor(color);
 	this->defaultShader->setLightIntensity(intensity);
+	this->defaultShader->unbind();
+}
+
+void Renderer::setAmbientLight(glm::vec4 color, float intensity) {
+	this->defaultShader->bind();
+	this->defaultShader->setAmbientLightColor(color);
+	this->defaultShader->setAmbientLightIntensity(intensity);
 	this->defaultShader->unbind();
 }
 

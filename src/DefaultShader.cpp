@@ -31,3 +31,14 @@ bool DefaultShader::setLightIntensity(float intensity) {
 	return this->setUniform(this->lightIntensity, intensity);
 }
 
+bool DefaultShader::setLightColor(glm::vec4 color) {
+	return this->setUniform(this->lightColor, color);
+}
+
+bool DefaultShader::setAmbientLightColor(glm::vec4 color) {
+	return this->setUniform(this->ambientLightColor, color);
+}
+
+bool DefaultShader::setAmbientLightIntensity(float intensity) {
+	return this->setUniform(this->ambientLightIntensity, intensity);
+}
