@@ -13,7 +13,7 @@ default: $(BIN)
 $(OBJDIR):
 	mkdir $@
 
-$(OBJDIR)/%.o: $(SRCDIR)/%.cpp $(OBJDIR)
+$(OBJDIR)/%.o: $(SRCDIR)/%.cpp | $(OBJDIR)
 	$(CC) -o $@ -c $(CFLAGS) $<
 
 $(BIN): $(OBJ)
