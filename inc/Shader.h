@@ -20,6 +20,8 @@ protected:
 
 	bool setUniform(std::string, glm::mat4 value);
 	bool setUniform(std::string, glm::vec4 value);
+	bool setUniform(std::string, glm::vec3 value);
+	bool setUniform(std::string, GLfloat value);
 private:
 	typedef struct {
 	    GLenum       type;
