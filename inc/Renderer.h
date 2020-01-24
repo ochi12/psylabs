@@ -19,6 +19,8 @@ public:
 
 	void registerObject(Model* m);
 
+	void setLight(glm::vec3 pos, float intensity);
+
 	void clearScreen();
 	void startRendering(Camera* m);
 

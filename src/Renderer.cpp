@@ -11,6 +11,7 @@ Renderer::Renderer() {
 
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
+	glEnable(GL_DEPTH_TEST);
 }
 
 Renderer::~Renderer() {
@@ -26,6 +27,13 @@ void Renderer::setPerspectiveProjection(float fovy, float aspect, float near, fl
 
 void Renderer::registerObject(Model* m) {
 	m->setAttributeIndices(this->defaultShader->getPosLocation(), this->defaultShader->getNormalLocation());
+}
+
+void Renderer::setLight(glm::vec3 pos, float intensity) {
+	this->defaultShader->bind();
+	this->defaultShader->setLightPos(pos);
+	this->defaultShader->setLightIntensity(intensity);
+	this->defaultShader->unbind();
 }
 
 void Renderer::clearScreen() {

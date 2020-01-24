@@ -11,11 +11,13 @@ public:
 	bool setView(glm::mat4 view);
 	bool setModel(glm::mat4 model);
 	bool setColor(glm::vec4 color);
+	bool setLightPos(glm::vec3 pos);
+	bool setLightIntensity(float intensity);
 
 	inline GLuint getPosLocation() { return pos; };
 	inline GLuint getNormalLocation() { return normal; };
 private:
-	const char* projection = "projection", *view = "view", *model = "model", *color = "color";
+	const char* projection = "projection", *view = "view", *model = "model", *color = "color", *lightPos = "lightPos", *lightIntensity = "lightIntensity";
 	const int pos = 0, normal = 1;
 };
 

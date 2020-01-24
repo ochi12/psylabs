@@ -20,9 +20,11 @@ Game::Game() : r(new Renderer()){
 
 	if (this->running) {
 		this->r->setPerspectiveProjection(30, 640.0f/480.0f, 0.01f, 1000);
-		this->r->setRenderColor(glm::vec4(0, 0, 1, 1));
+		this->r->setRenderColor(glm::vec4(1, 0, 0, 1));
 
 		this->r->registerObject(m);
+
+		this->r->setLight(glm::vec3(0, 0, 0), 50);
 	}
 }
 

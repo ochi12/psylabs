@@ -22,3 +22,12 @@ bool DefaultShader::setModel(glm::mat4 model) {
 bool DefaultShader::setColor(glm::vec4 color) {
 	return this->setUniform(this->color, color);
 }
+
+bool DefaultShader::setLightPos(glm::vec3 pos) {
+	return this->setUniform(this->lightPos, pos);
+}
+
+bool DefaultShader::setLightIntensity(float intensity) {
+	return this->setUniform(this->lightIntensity, intensity);
+}
+

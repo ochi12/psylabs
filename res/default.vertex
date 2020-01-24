@@ -6,10 +6,18 @@ layout(location = 1) in vec3 normal;
 uniform mat4 projection, view, model;
 uniform vec4 color;
 
+uniform vec3 lightPos;
+uniform float lightIntensity;
+
 out vec4 vertexColor;
 
 void main() {
 	gl_Position = projection * view * model * vec4(pos, 1.0f);
-	vertexColor = color;
+	vec3 worldPos = (model * vec4(pos, 1.0f)).xyz;
+	vec3 lightDir = lightPos - worldPos;
+	float distance = length(lightPos - worldPos);
+	lightDir /= distance;
+	vertexColor.xyz = color.xyz * max(lightIntensity/distance * dot(lightDir, normal), 0.1f);
+	vertexColor.w = color.w;
 }
 

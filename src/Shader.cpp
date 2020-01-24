@@ -1,5 +1,6 @@
 #include <SDL2/SDL.h>
 #include <glm/ext.hpp>
+#include <iostream>
 
 #include "Shader.h"
 #include "resources.h"
@@ -65,6 +66,26 @@ bool Shader::setUniform(std::string name, glm::vec4 value) {
 	return success;
 }
 
+bool Shader::setUniform(std::string name, glm::vec3 value) {
+	bool success = false;
+	GLint loc = this->getUniformLocation(name);
+	if (loc > -1) {
+		glUniform3fv(loc, 1, glm::value_ptr(value));
+		success = true;
+	}
+	return success;
+}
+
+bool Shader::setUniform(std::string name, GLfloat value) {
+	bool success = false;
+	GLint loc = this->getUniformLocation(name);
+	if (loc > -1) {
+		glUniform1f(loc, value);
+		success = true;
+	}
+	return success;
+}
+
 bool Shader::isLinked() {
 	return this->linked;
 }
@@ -77,6 +98,8 @@ GLint Shader::getUniformLocation(std::string name) {
 		loc = glGetUniformLocation(this->program, name.c_str());
 		if (loc > -1) {
 			(*this->uniformLocations)[name] = loc;
+		} else {
+			std::cout << "holy moly" << std::endl;
 		}
 	}
 	return loc;

@@ -12,8 +12,6 @@ Model::Model(GLfloat* mesh, GLsizeiptr meshSize, GLfloat* normals, GLsizeiptr no
 	glBufferSubData(GL_ARRAY_BUFFER, meshSize, normalsSize, normals);
 
 
-	glBufferData(GL_ARRAY_BUFFER, meshSize, mesh, GL_STATIC_DRAW);
-
 	glGenBuffers(1, &(this->ibo));
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->ibo);
 
