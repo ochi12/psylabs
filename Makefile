@@ -9,7 +9,10 @@ BIN=game
 
 default: $(BIN)
 
-$(OBJDIR)/%.o: $(SRCDIR)/%.cpp
+$(OBJDIR):
+	mkdir $@
+
+$(OBJDIR)/%.o: $(SRCDIR)/%.cpp $(OBJDIR)
 	$(CC) -o $@ -c $(CFLAGS) $<
 
 $(BIN): $(OBJ)
