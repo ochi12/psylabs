@@ -36,7 +36,7 @@ const glm::vec3& Camera::getRotation() {
 }
 
 glm::vec3 Camera::getRight() {
-	return -glm::cross(this->getUp(), this->getForward());
+	return -glm::normalize(glm::cross(this->getUp(), this->getForward()));
 }
 
 void Camera::rotate(glm::vec3 rotation) {
