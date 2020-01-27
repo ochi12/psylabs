@@ -4,7 +4,7 @@ glm::vec3 getVector(float alpha, float beta) {
 	float r = cos(glm::radians(alpha));
 
 	return glm::vec3(
-		-sin(glm::radians(beta)) * r,
+		 sin(glm::radians(beta)) * r,
 		 sin(glm::radians(alpha)),
 		-cos(glm::radians(beta)) * r);
 }
