@@ -99,6 +99,15 @@ bool Shader::setUniform(std::string name, GLfloat value) {
 	return success;
 }
 
+bool Shader::setUniform(std::string name, GLint value) {
+	bool success = false;
+	GLint loc = this->getUniformLocation(name);
+	if (loc > -1) {
+		glUniform1i(loc, value);
+		success = true;
+	}
+	return success;
+}
 bool Shader::isLinked() {
 	return this->linked;
 }
@@ -112,7 +121,7 @@ GLint Shader::getUniformLocation(std::string name) {
 		if (loc > -1) {
 			(*this->uniformLocations)[name] = loc;
 		} else {
-			std::cout << "holy moly" << name << std::endl;
+			std::cout << "holy moly: " << name << std::endl;
 		}
 	}
 	return loc;

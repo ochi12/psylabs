@@ -18,16 +18,15 @@ public:
 	void setPerspectiveProjection(float fovy, float aspect, float near, float far);
 
 	void registerObject(Model* m);
-
-	void setLight(glm::vec3 pos, glm::vec4 color, float intensity);
-	void setAmbientLight(glm::vec4(color), float intensity);
+	void setPointLight(int i, const PointLight& l);
+	void setLightMask(int i);
 
 	void clearScreen();
 	void startRendering(Camera* m);
 
-	void setRenderColor(glm::vec4 color);
-	void renderModel(Model* m, glm::vec3 position, glm::vec3 scale);
-	void renderModel(Model* m, glm::vec3 position);
+	void renderModel(Model* m, const glm::vec3& position, const glm::vec3& scale, const glm::vec3& rotation);
+	void renderModel(Model* m, const glm::vec3& position, const glm::vec3& scale);
+	void renderModel(Model* m, const glm::vec3& position);
 
 	void endRendering();
 
@@ -36,8 +35,6 @@ private:
 	bool valid = true;
 	DefaultShader* defaultShader = nullptr;
 	Model* currentModel = nullptr;
-
-	glm::mat4 projection = glm::identity<glm::mat4>();
 };
 
 #endif // _RENDERER_H_

@@ -1,6 +1,6 @@
-#include "Model.h"
+#include "Mesh.h"
 
-Model::Model(GLfloat* mesh, GLsizeiptr meshSize, GLfloat* normals, GLsizeiptr normalsSize, GLuint* indices, GLsizeiptr indicesSize, GLuint triangles) {
+Mesh::Mesh(GLfloat* mesh, GLsizeiptr meshSize, GLfloat* normals, GLsizeiptr normalsSize, GLuint* indices, GLsizeiptr indicesSize, GLuint triangles) {
 	glGenVertexArrays(1, &(this->vao));
 	glBindVertexArray(this->vao);
 
@@ -26,22 +26,22 @@ Model::Model(GLfloat* mesh, GLsizeiptr meshSize, GLfloat* normals, GLsizeiptr no
 	this->triangles = triangles;
 }
 
-Model::~Model() {
+Mesh::~Mesh() {
 	glDeleteBuffers(1, &(this->vbo));
 	glDeleteBuffers(1, &(this->ibo));
 
 	glDeleteVertexArrays(1, &(this->vao));
 }
 
-void Model::bind() {
+void Mesh::bind() {
 	glBindVertexArray(this->vao);
 }
 
-void Model::unbind() {
+void Mesh::unbind() {
 	glBindVertexArray(0);
 }
 
-void Model::setAttributeIndices(GLuint pos, GLuint normal) {
+void Mesh::setAttributeIndices(GLuint pos, GLuint normal) {
 	glBindBuffer(GL_ARRAY_BUFFER, this->vbo);
 	glBindVertexArray(this->vao);
 
@@ -55,7 +55,7 @@ void Model::setAttributeIndices(GLuint pos, GLuint normal) {
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-void Model::draw() {
+void Mesh::draw() {
 	glDrawElements(GL_TRIANGLES, this->triangles, GL_UNSIGNED_INT, (void*)0);
 }
 

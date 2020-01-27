@@ -1,5 +1,7 @@
 #include "Renderer.h"
 #include "resources.h"
+#define GLM_ENABLE_EXPERIMENTAL
+#include <glm/gtx/string_cast.hpp>
 #include "opengl.h"
 
 Renderer::Renderer() {
@@ -20,27 +22,24 @@ Renderer::~Renderer() {
 
 void Renderer::setPerspectiveProjection(float fovy, float aspect, float near, float far) {
 	this->defaultShader->bind();
-	this->defaultShader->setPerspectiveProjection(fovy, aspect, near, far);
+	this->defaultShader->setPerspectiveProjectionMatrix(fovy, aspect, near, far);
 	this->defaultShader->unbind();
 }
 
 
 void Renderer::registerObject(Model* m) {
-	m->setAttributeIndices(this->defaultShader->getPosLocation(), this->defaultShader->getNormalLocation());
+	m->mesh->setAttributeIndices(this->defaultShader->getPosLocation(), this->defaultShader->getNormalLocation());
 }
 
-void Renderer::setLight(glm::vec3 pos, glm::vec4 color, float intensity) {
+void Renderer::setPointLight(int i, const PointLight& l) {
 	this->defaultShader->bind();
-	this->defaultShader->setLightPos(pos);
-	this->defaultShader->setLightColor(color);
-	this->defaultShader->setLightIntensity(intensity);
+	this->defaultShader->setLight(i, l);
 	this->defaultShader->unbind();
 }
 
-void Renderer::setAmbientLight(glm::vec4 color, float intensity) {
+void Renderer::setLightMask(int i) {
 	this->defaultShader->bind();
-	this->defaultShader->setAmbientLightColor(color);
-	this->defaultShader->setAmbientLightIntensity(intensity);
+	this->defaultShader->setLightMask(i);
 	this->defaultShader->unbind();
 }
 
@@ -58,44 +57,47 @@ void Renderer::startRendering(Camera* cam) {
 	view = glm::rotate(view, glm::radians( cam->getRotation().z), glm::vec3(0, 0, 1));
 
 	view = glm::translate(view, glm::vec3(0, 0, 0) - cam->getPosition());
-	this->defaultShader->setView(view);
+	this->defaultShader->setViewMatrix(view);
 	this->defaultShader->setViewPos(cam->getPosition());
-	this->defaultShader->setShininess(300);
-	this->defaultShader->setSpecularIntensity(0.3f);
 }
 
-void Renderer::renderModel(Model* m, glm::vec3 pos, glm::vec3 scale) {
+void Renderer::renderModel(Model* m, const glm::vec3& pos, const glm::vec3& scale, const glm::vec3& rotation) {
 	if (m != this->currentModel) {
-		this->currentModel->unbind();
+		if (this->currentModel != nullptr) {
+			this->currentModel->mesh->unbind();
+		}
 		this->currentModel = m;
-		this->currentModel->bind();
+		this->currentModel->mesh->bind();
+		this->defaultShader->setMaterial((*this->currentModel->material));
 	}
 
 	glm::mat4 model = glm::identity<glm::mat4>();
 	model = glm::translate(model, pos);
 	model = glm::scale(model, scale);
+	model = glm::rotate(model, glm::radians(rotation.x), glm::vec3(1, 0, 0));
+	model = glm::rotate(model, glm::radians(rotation.y), glm::vec3(0, 1, 0));
+	model = glm::rotate(model, glm::radians(rotation.z), glm::vec3(0, 0, 1));
 
-	this->defaultShader->setModel(model);
+	this->defaultShader->setModelMatrix(model);
 	this->defaultShader->setNormalMatrix(glm::inverseTranspose(glm::mat3(model)));
 
-	this->currentModel->draw();
+	this->currentModel->mesh->draw();
 }
 
-void Renderer::renderModel(Model* m ,glm::vec3 pos) {
+void Renderer::renderModel(Model* m, const glm::vec3& pos, const glm::vec3& scale) {
+	this->renderModel(m, pos, scale, glm::vec3(0, 0, 0));
+}
+
+void Renderer::renderModel(Model* m , const glm::vec3& pos) {
 	this->renderModel(m, pos, glm::vec3(1, 1, 1));
 }
 
 void Renderer::endRendering() {
 	this->defaultShader->unbind();
-	this->currentModel->unbind();
+	this->currentModel->mesh->unbind();
 	this->currentModel = nullptr;
 }
 
-void Renderer::setRenderColor(glm::vec4 color) {
-	this->defaultShader->bind();
-	this->defaultShader->setColor(color);
-	this->defaultShader->unbind();
-}
 
 bool Renderer::isValidState() {
 	return this->valid;

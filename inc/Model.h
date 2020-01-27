@@ -2,23 +2,25 @@
 #define _MODEL_H_
 
 #include <glm/glm.hpp>
+#include <iostream>
 
 #include "opengl.h"
+#include "Mesh.h"
+#include "Material.h"
 
-class Model {
-public:
-	Model(GLfloat* mesh, GLsizeiptr meshSize, GLfloat* normals, GLsizeiptr normalsSize, GLuint* indices, GLsizeiptr indicesSize, GLuint triangles);
-	~Model();
+struct Model {
+	Model(Mesh* mesh, Material* mat) {
+		this->mesh = mesh;
+		this->material = mat;
+	}
 
-	void bind();
-	void unbind();
+	~Model() {
+		delete this->mesh;
+		delete this->material;
+	}
 
-	void setAttributeIndices(GLuint pos, GLuint normal);
-
-	void draw();
-private:
-	GLuint vbo, ibo, vao, triangles;
-	GLsizeiptr meshSize, normalsSize;
+	Mesh *mesh;
+	Material *material;
 };
 
 #endif // _MODEL_H_
