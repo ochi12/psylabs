@@ -19,6 +19,10 @@ bool DefaultShader::setModel(glm::mat4 model) {
 	return this->setUniform(this->model, model);
 }
 
+bool DefaultShader::setNormalMatrix(glm::mat3 normal) {
+	return this->setUniform(this->normalMatrix, normal);
+}
+
 bool DefaultShader::setColor(glm::vec4 color) {
 	return this->setUniform(this->color, color);
 }
@@ -42,3 +46,16 @@ bool DefaultShader::setAmbientLightColor(glm::vec4 color) {
 bool DefaultShader::setAmbientLightIntensity(float intensity) {
 	return this->setUniform(this->ambientLightIntensity, intensity);
 }
+
+bool DefaultShader::setShininess(float shininess) {
+	return this->setUniform(this->shininess, shininess);
+}
+
+bool DefaultShader::setSpecularIntensity(float spec) {
+	return this->setUniform(this->specularIntensity, spec);
+}
+
+bool DefaultShader::setViewPos(glm::vec3 pos) {
+	return this->setUniform(this->viewPos, pos);
+}
+

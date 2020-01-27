@@ -54,11 +54,14 @@ void Renderer::startRendering(Camera* cam) {
 
 	glm::mat4 view = glm::identity<glm::mat4>();
 	view = glm::rotate(view, glm::radians(-cam->getRotation().x), glm::vec3(1, 0, 0));
-	view = glm::rotate(view, glm::radians(-cam->getRotation().y), glm::vec3(0, 1, 0));
-	view = glm::rotate(view, glm::radians(-cam->getRotation().z), glm::vec3(0, 0, 1));
+	view = glm::rotate(view, glm::radians( cam->getRotation().y), glm::vec3(0, 1, 0));
+	view = glm::rotate(view, glm::radians( cam->getRotation().z), glm::vec3(0, 0, 1));
 
 	view = glm::translate(view, glm::vec3(0, 0, 0) - cam->getPosition());
 	this->defaultShader->setView(view);
+	this->defaultShader->setViewPos(cam->getPosition());
+	this->defaultShader->setShininess(300);
+	this->defaultShader->setSpecularIntensity(0.3f);
 }
 
 void Renderer::renderModel(Model* m, glm::vec3 pos, glm::vec3 scale) {
@@ -73,6 +76,7 @@ void Renderer::renderModel(Model* m, glm::vec3 pos, glm::vec3 scale) {
 	model = glm::scale(model, scale);
 
 	this->defaultShader->setModel(model);
+	this->defaultShader->setNormalMatrix(glm::inverseTranspose(glm::mat3(model)));
 
 	this->currentModel->draw();
 }

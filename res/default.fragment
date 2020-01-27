@@ -1,10 +1,44 @@
 #version 330
 
-in vec4 vertexColor;
+uniform vec4 ambientColor;
+uniform float ambientIntensity;
+
+uniform vec3 lightPos;
+uniform vec4 lightColor;
+uniform float lightIntensity;
+
+uniform vec3 viewPos;
+
+uniform vec4 color;
+
+uniform float specularIntensity;
+uniform float shininess;
+
+in vec3 fragPos;
+in vec3 fragNormal;
 
 out vec4 fragColor;
 
 void main() {
-	fragColor = vertexColor;
+	// Just in case interpolation messed up the length of the normal
+	vec3 normal = normalize(fragNormal);
+
+	// Save distance from vertex in world space to light source and normalize the vector
+	vec3 lightDir = lightPos - fragPos;
+	float distance = length(lightPos - fragPos);
+	lightDir /= distance;
+
+	// Calculate how much of the color to show
+	float finalIntensity = clamp(lightIntensity/distance * dot(lightDir, normal), 0, 1);
+
+	vec3 viewDir = normalize(viewPos - fragPos);
+	vec3 reflectionDir = reflect(-lightDir, normal);
+
+	float specular = pow(max(dot(viewDir, reflectionDir), 0), shininess);
+	vec4 finalSpecular = lightColor * specular * specularIntensity;
+
+	vec4 diffuse = lightColor * finalIntensity;
+	vec4 ambient = ambientColor * ambientIntensity;
+	fragColor = (diffuse + ambient + finalSpecular) * color;
 }
 

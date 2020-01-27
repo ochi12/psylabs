@@ -1,5 +1,6 @@
 #include <iostream>
 #include <SDL2/SDL.h>
+
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/string_cast.hpp>
 
@@ -24,8 +25,8 @@ Game::Game() : r(new Renderer()){
 
 		this->r->registerObject(m);
 
-		this->r->setLight(glm::vec3(0, 0, 0), glm::vec4(0.3f, 0.3f, 1, 1), 25);
-		this->r->setAmbientLight(glm::vec4(1, 0, 0, 1), 0.2f);
+		this->r->setLight(glm::vec3(0, 0, 0), glm::vec4(1, 1, 1, 1), 5);
+		this->r->setAmbientLight(glm::vec4(1, 1, 1, 1), 0.1f);
 	}
 }
 
@@ -36,11 +37,11 @@ void Game::update(float delta) {
 	const Uint8 *keyboard = SDL_GetKeyboardState(NULL);
 	glm::vec3 cameraRotation = glm::vec3(0, 0, 0);
 
-	int x, y;
+	int x, y, z = 0;
 	SDL_GetRelativeMouseState(&x, &y);
 
-	float rotationSpeed = 45;
-	cameraRotation = glm::vec3(-y * rotationSpeed, -x * rotationSpeed, 0);
+	float rotationSpeed = 30;
+	cameraRotation = glm::vec3(-y, x, z) * rotationSpeed;
 	cam->rotate(cameraRotation * delta);
 
 	float movementSpeed = 20;

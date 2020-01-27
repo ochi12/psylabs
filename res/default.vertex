@@ -4,34 +4,16 @@ layout(location = 0) in vec3 pos;
 layout(location = 1) in vec3 normal;
 
 uniform mat4 projection, view, model;
-uniform vec4 color;
+uniform mat3 normalMatrix;
 
-uniform vec4 ambientColor;
-uniform float ambientIntensity;
-
-uniform vec3 lightPos;
-uniform vec4 lightColor;
-uniform float lightIntensity;
-
-out vec4 vertexColor;
+out vec3 fragPos;
+out vec3 fragNormal;
 
 void main() {
 	// Calculate world coordinate and final vertex position
-	vec3 worldPos = (model * vec4(pos, 1.0f)).xyz;
-	gl_Position = projection * view * vec4(worldPos, 1);
+	fragPos = (model * vec4(pos, 1.0f)).xyz;
+	gl_Position = projection * view * vec4(fragPos, 1);
 
-	// Save distance from vertex in world space to light source and normalize the vector
-	vec3 lightDir = lightPos - worldPos;
-	float distance = length(lightPos - worldPos);
-	lightDir /= distance;
-
-
-	// Calculate how much of the color to show
-	float finalIntensity = clamp(lightIntensity/distance * dot(lightDir, normal), 0, 1);
-
-	vertexColor.x = max(ambientColor.x * ambientIntensity, min(color.x, lightColor.x) * finalIntensity);
-	vertexColor.y = max(ambientColor.y * ambientIntensity, min(color.y, lightColor.y) * finalIntensity);
-	vertexColor.z = max(ambientColor.z * ambientIntensity, min(color.z, lightColor.z) * finalIntensity);
-	vertexColor.w = color.w;
+	fragNormal = normalMatrix * normal;
 }
 
