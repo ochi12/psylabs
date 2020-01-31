@@ -18,6 +18,7 @@ int main (int argc, char* argv[]) {
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 
 	window = SDL_CreateWindow("OpenGL", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_OPENGL);
 	if (window == nullptr) {
@@ -35,10 +36,10 @@ int main (int argc, char* argv[]) {
 		return -1;
 	}
 
-	SDL_GL_SetSwapInterval(0);
+	SDL_GL_SetSwapInterval(1);
 	int swapInterval = SDL_GL_GetSwapInterval();
-	if (swapInterval != 0) {
-		SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "Swap interval is %d, which differs from the desired interval(%d)", swapInterval, 0);
+	if (swapInterval != 1) {
+		SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "Swap interval is %d, which differs from the desired interval(%d)", swapInterval, 1);
 	}
 
 	int minor, major, profile;

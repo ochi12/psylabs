@@ -48,13 +48,12 @@ void Renderer::clearScreen() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void Renderer::startRendering(Camera* cam) {
+void Renderer::startRendering(FpsCamera* cam) {
 	this->defaultShader->bind();
 
 	glm::mat4 view = glm::identity<glm::mat4>();
 	view = glm::rotate(view, glm::radians(-cam->getRotation().x), glm::vec3(1, 0, 0));
 	view = glm::rotate(view, glm::radians( cam->getRotation().y), glm::vec3(0, 1, 0));
-	view = glm::rotate(view, glm::radians( cam->getRotation().z), glm::vec3(0, 0, 1));
 
 	view = glm::translate(view, glm::vec3(0, 0, 0) - cam->getPosition());
 	this->defaultShader->setViewMatrix(view);

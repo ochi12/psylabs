@@ -8,7 +8,7 @@
 #include "opengl.h"
 #include "DefaultShader.h"
 #include "Model.h"
-#include "Camera.h"
+#include "FpsCamera.h"
 
 class Renderer {
 public:
@@ -22,7 +22,7 @@ public:
 	void setLightMask(int i);
 
 	void clearScreen();
-	void startRendering(Camera* m);
+	void startRendering(FpsCamera* m);
 
 	void renderModel(Model* m, const glm::vec3& position, const glm::vec3& scale, const glm::vec3& rotation);
 	void renderModel(Model* m, const glm::vec3& position, const glm::vec3& scale);
